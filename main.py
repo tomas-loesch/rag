@@ -3,12 +3,11 @@ from rag_module import RAGPipeline
 import os
 
 def main():
-    # Defina sua chave da API aqui ou idealmente no arquivo .env
-    # Se nao encontrar a chave, pede para o usuario digitar
+    
     if not os.getenv("OPENAI_API_KEY"):
         os.environ["OPENAI_API_KEY"] = input("Insira sua OpenAI API Key: ")
 
-    pdf_file = "exemplo.pdf"  # Certifique-se que o arquivo existe
+    pdf_file = "exemplo.pdf"  
     
     # Verifica se o PDF existe antes de tentar rodar
     if not os.path.exists(pdf_file):
@@ -23,7 +22,7 @@ def main():
     rag.ingest_data()
     
     # Loop de interacao
-    print("\n?? Bot RAG pronto! Digite 'sair' para encerrar.")
+    print("\n Bot RAG pronto! Digite 'sair' para encerrar.")
     while True:
         try:
             user_input = input("\nPergunta: ")

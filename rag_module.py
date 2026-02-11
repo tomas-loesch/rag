@@ -2,7 +2,7 @@
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-# MUDANÇA 1: Trocamos OpenAI por Ollama
+#Troca OpenAI por Ollama
 from langchain_ollama import OllamaEmbeddings, ChatOllama
 from langchain_chroma import Chroma
 from langchain.chains import create_retrieval_chain
@@ -17,8 +17,8 @@ class RAGPipeline:
         self.pdf_path = pdf_path
         self.vector_store = None
         
-        # MUDANÇA 2: Configurando o modelo Local (Gratis)
-        # 'mistral' é um modelo open-source muito bom
+        # Configurando o modelo Local 
+        # 'mistral'
         print("?? Inicializando modelo local (Ollama)...")
         self.llm = ChatOllama(model="mistral", temperature=0)
 
@@ -27,7 +27,7 @@ class RAGPipeline:
         if not os.path.exists(self.pdf_path):
             raise FileNotFoundError(f"Arquivo nao encontrado: {self.pdf_path}")
 
-        print(f"?? Carregando {self.pdf_path}...")
+        print(f"Carregando {self.pdf_path}...")
         loader = PyPDFLoader(self.pdf_path)
         docs = loader.load()
 
@@ -37,15 +37,15 @@ class RAGPipeline:
         )
         splits = text_splitter.split_documents(docs)
 
-        print("?? Gerando Embeddings locais (isso usa sua CPU)...")
-        # MUDANÇA 3: Embeddings locais gratuitos
+        print("Gerando Embeddings locais (isso usa CPU)...")
+        # Embeddings locais gratuitos
         embeddings = OllamaEmbeddings(model="nomic-embed-text")
         
         self.vector_store = Chroma.from_documents(
             documents=splits, 
             embedding=embeddings
         )
-        print("? Indexacao concluida!")
+        print("Indexacao concluida!")
 
     def ask(self, query):
         if not self.vector_store:
@@ -71,6 +71,6 @@ class RAGPipeline:
         question_answer_chain = create_stuff_documents_chain(self.llm, prompt)
         rag_chain = create_retrieval_chain(retriever, question_answer_chain)
 
-        print("?? Pensando...")
+        print("Pensando...")
         response = rag_chain.invoke({"input": query})
         return response["answer"]
