@@ -30,5 +30,5 @@ O sistema segue o fluxo padrão de RAG:
  main.py           # Ponto de entrada da aplicação (CLI)
  rag_module.py     # Lógica encapsulada da pipeline RAG
  requirements.txt  # Dependências do projeto
- .env              # Variáveis de ambiente (API Keys) - NÃO COMMITAR
+ .env              # Variáveis de ambiente (API Keys)
  README.md         # Documentação
