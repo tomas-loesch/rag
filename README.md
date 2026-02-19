@@ -30,6 +30,7 @@ O sistema segue o fluxo padrão de RAG:
 1. Ter o Ollama instalado e rodando.
 2. Baixar os modelos necessários:
    ollama pull mistral
+   
    ollama pull nomic-embed-text
    
 * **Opção 1**: Via Docker
