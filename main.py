@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from rag_module import RAGPipeline
 import os
 
@@ -15,13 +14,10 @@ def main():
         print("Por favor, adicione um PDF e tente novamente.")
         return
 
-    # Instancia a pipeline
     rag = RAGPipeline(pdf_file)
     
-    # Ingestao (Indexacao) - Acentos removidos para evitar erro
     rag.ingest_data()
     
-    # Loop de interacao
     print("\n Bot RAG pronto! Digite 'sair' para encerrar.")
     while True:
         try:
