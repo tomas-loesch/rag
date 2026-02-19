@@ -1,34 +1,54 @@
 # RAG PDF Assistant com LangChain
 
-> Um sistema de Perguntas e Respostas (QA) baseado em documentos PDF, utilizando a arquitetura RAG (Retrieval-Augmented Generation).
+> Um sistema de Perguntas e Respostas (QA) local e privado baseado em documentos PDF, utilizando a arquitetura RAG (Retrieval-Augmented Generation).
 
-Este projeto demonstra a implementaÁ„o de uma pipeline de IA Generativa capaz de ingerir documentos tÈcnicos, vetoriz·-los e permitir consultas em linguagem natural com alta precis„o de contexto.
+Este projeto demonstra a implementa√ß√£o de uma pipeline de IA Generativa capaz de ingerir documentos t√©cnicos, vetoriz√°-los e permitir consultas em linguagem natural com total privacidade, j√° que todo o processamento ocorre localmente.
 
 ## Tecnologias Utilizadas
 
 * **Python 3.10+**
-* **LangChain**: Framework para orquestraÁ„o de LLMs.
-* **OpenAI API (GPT-3.5/4)**: Modelo de geraÁ„o e embeddings.
-* **ChromaDB**: Banco de dados vetorial (Vector Store) para busca sem‚ntica.
+* **LangChain**: Framework para orquestra√ß√£o de LLMs.
+* **Ollama (Mistral)**: LLM local para gera√ß√£o de respostas.
+* **nomic-embed-text**: Modelo de embeddings local via Ollama.
+* **ChromaDB**: Banco de dados vetorial (Vector Store) para busca sem√¢ntica.
 * **PyPDF**: Carregamento e parsing de arquivos PDF.
-* **Ollama**: Modelo LLM local
+* **Streamlit**: Interface web para intera√ß√£o com o chat.
+* **Docker**: Containeriza√ß√£o para garantir que o projeto rode em qualquer ambiente.
 
 ## Arquitetura do Projeto
 
-O sistema segue o fluxo padr„o de RAG:
+O sistema segue o fluxo padr√£o de RAG:
 
-1.  **Ingest„o**: Carregamento do PDF via `PyPDFLoader`.
-2.  **Chunking**: Divis„o do texto usando `RecursiveCharacterTextSplitter` para manter o contexto sem‚ntico entre quebras.
-3.  **Embedding**: Convers„o dos chunks em vetores numÈricos usando `OpenAIEmbeddings`.
-4.  **Armazenamento**: IndexaÁ„o dos vetores no `ChromaDB`.
-5.  **RecuperaÁ„o (Retrieval)**: Busca por similaridade (Cosine Similarity) para encontrar os trechos mais relevantes ‡ pergunta do usu·rio.
-6.  **GeraÁ„o**: Envio do contexto recuperado + pergunta para o LLM gerar a resposta final.
+1.  **Ingest√£o**: Carregamento do PDF via `PyPDFLoader`.
+2.  **Chunking**: Divis√£o do texto usando `RecursiveCharacterTextSplitter` para manter o contexto sem√¢ntico entre quebras.
+3.  **Embedding Local**: Convers√£o de texto em vetores usando `OllamaEmbeddings`.
+4.  **Recupera√ß√£o**: Busca por similaridade no ChromaDB.
+5.  **Gera√ß√£o Privada**:O contexto √© injetado no prompt do Mistral para gerar a resposta fundamentada.
+
+## Como executar
+
+1. Ter o Ollama instalado e rodando.
+2. Baixar os modelos necess√°rios:
+   ollama pull mistral
+   ollama pull nomic-embed-text
+   
+* **Op√ß√£o 1**: Via Docker
+  docker build -t rag .
+  docker run -p 8501:8501 rag
+* **Op√ß√£o 2**: Localmente
+  1. Crie um ambiente virtual: python -m venv venv
+  2. Ative o ambiente: .\venv\Scripts\activate (Windows) ou source venv/bin/activate (Linux/Mac)
+  3. Instale as depend√™ncias: pip install -r requirements.txt
+  4. Execute o app: streamlit run app_web.py
+  
+  
 
 ## Estrutura de Arquivos
 
 ```bash
- main.py           # Ponto de entrada da aplicaÁ„o (CLI)
- rag_module.py     # LÛgica encapsulada da pipeline RAG
- requirements.txt  # DependÍncias do projeto
- .env              # Vari·veis de ambiente (API Keys)
- README.md         # DocumentaÁ„o
+ app_web.py        # Interface Web (Streamlit)
+ main.py           # Interface de terminal (CLI)
+ rag_module.py     # L√≥gica central da pipeline RAG
+ Dockerfile        # Configura√ß√£o para deploy em container
+ requirements.txt  # Depend√™ncias enxutas do projeto
+ .gitignore        # Prote√ß√£o para n√£o subir banco de dados ou arquivos tempor√°rios
