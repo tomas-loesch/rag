@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -17,9 +16,7 @@ class RAGPipeline:
         self.pdf_path = pdf_path
         self.vector_store = None
         
-        # Configurando o modelo Local 
-        # 'mistral'
-        print("?? Inicializando modelo local (Ollama)...")
+        print("Inicializando modelo local (Ollama)...")
         self.llm = ChatOllama(model="mistral", temperature=0)
 
     def ingest_data(self):
@@ -38,7 +35,6 @@ class RAGPipeline:
         splits = text_splitter.split_documents(docs)
 
         print("Gerando Embeddings locais (isso usa CPU)...")
-        # Embeddings locais gratuitos
         embeddings = OllamaEmbeddings(model="nomic-embed-text")
         
         self.vector_store = Chroma.from_documents(
